@@ -107,7 +107,7 @@ class New_Window(QWidget, Ui_Form):
         self.pushButton_3.clicked.connect(self.save)
 
     def get_names(self):
-        con = sqlite3.connect("coffee.db")
+        con = sqlite3.connect("data/coffee.db")
         cur = con.cursor()
         result = cur.execute("""SELECT * FROM coffee""").fetchall()
         con.close()
@@ -123,7 +123,7 @@ class New_Window(QWidget, Ui_Form):
                 self.pushButton_3.setStyleSheet("background-color: red")
             else:
                 try:
-                    con = sqlite3.connect("coffee.db")
+                    con = sqlite3.connect("data/coffee.db")
                     cur = con.cursor()
                     cur.execute("""INSERT INTO coffee (id, name, roast, type, description, price, volume)
                     VALUES (?,?,?,?,?,?,?)""", (len(self.names) + 1,str(self.lineEdit_2.text()),self.comboBox.currentText(),
@@ -137,7 +137,7 @@ class New_Window(QWidget, Ui_Form):
                     self.pushButton_3.setStyleSheet("background-color: red")
         else:
             try:
-                con = sqlite3.connect("coffee.db")
+                con = sqlite3.connect("data/coffee.db")
                 cur = con.cursor()
                 ind = cur.execute("""SELECT * FROM coffee WHERE name like ?""", (self.item.capitalize(),)).fetchall()[0][0]
                 cur.execute("""UPDATE coffee
@@ -162,7 +162,7 @@ class New_Window(QWidget, Ui_Form):
                                                      "Выберите кофе", "Выберите кофе:", self.names, 1, False)
 
             if ok_pressed:
-                con = sqlite3.connect("coffee.db")
+                con = sqlite3.connect("data/coffee.db")
                 cur = con.cursor()
                 result = cur.execute("""SELECT * FROM coffee WHERE name like ?""", (self.item.capitalize(),)).fetchall()[0]
                 self.lineEdit_2.setText(result[1])
@@ -292,7 +292,7 @@ class MyWidget(QMainWindow, Ui_MainWindow):
         self.pushButton_3.clicked.connect(self.load)
 
     def load(self):
-        con = sqlite3.connect("coffee.db")
+        con = sqlite3.connect("data/coffee.db")
         cur = con.cursor()
         result = cur.execute("""SELECT * FROM coffee""").fetchall()
         con.close()
@@ -312,7 +312,7 @@ class MyWidget(QMainWindow, Ui_MainWindow):
 
     def run(self):
         name = self.comboBox.currentText()
-        con = sqlite3.connect("coffee.db")
+        con = sqlite3.connect("data/coffee.db")
         cur = con.cursor()
         result = cur.execute("""SELECT * FROM coffee WHERE name like ?""", (name,)).fetchall()[0]
         self.lineEdit_2.setText(str(result[1]))
